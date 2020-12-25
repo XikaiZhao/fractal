@@ -1,1 +1,1 @@
-fractal
+Fractal on CPU
