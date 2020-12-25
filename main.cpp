@@ -23,16 +23,16 @@ int main() {
   }
   
   Color* color = new Color[params.pixel_nx*params.pixel_ny];
-  for(int j = 0; j < grid.nxPt()-1; j++) {
-    for(int i = 0; i < grid.nyPt()-1; i++){
-      color[i+j*grid.nxPt()].init(255, 255, 255);
+  for(int j = 0; j < grid.nyPt()-1; j++) {
+    for(int i = 0; i < grid.nxPt()-1; i++){
+      color[i+j*(grid.nxPt()-1)].init(0, 0, 0);
       if ( (iterations[i + j * grid.nxPt()] < params.max_iterations)
           || (iterations[(i+1) + j * grid.nxPt()] < params.max_iterations)
           || (iterations[i + (j+1) * grid.nxPt()] < params.max_iterations)
           || (iterations[(i+1) + (j+1) * grid.nxPt()] < params.max_iterations)
          ) {
      //   std::cout<<"(" << grid(i,j).real()<<", "<<grid(i,j).imag() <<")" << ": " << iterations[i + j * grid.nxPt()]<<std::endl;
-        color[i+j*grid.nxPt()].init(0, 0, 0);
+        color[i+j*(grid.nxPt()-1)].init(255, 255, 255);
       }
     }
   }
@@ -41,7 +41,7 @@ int main() {
   //string filename = "/mnt/c/Users/Ahmad/Dropbox/ray-tracer-master/test.bmp";
   saveBMP(filename, color, params.pixel_nx, params.pixel_ny);
   
-  delete color;
+  delete[] color;
 
   return 0;
 }
