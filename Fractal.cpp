@@ -12,5 +12,5 @@ int Fractal :: compute(std::complex<double> z_0) {
     }
     iter++;
   }
-  return iter;
+  return 0;
 }

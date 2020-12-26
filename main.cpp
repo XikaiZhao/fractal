@@ -2,7 +2,7 @@
 #include "Fractal.h"
 #include "Grid2D.h"
 #include "BMPHandler.h"
-#include "Color.h"
+#include "ColoringMethods.h"
 
 using namespace std;
 
@@ -13,33 +13,22 @@ int main() {
   Grid2D grid(params);
   grid.setup();
   
-  Mandelbrot set;
-  set.init(params);
+  Mandelbrot mandelbrotSet;
+  mandelbrotSet.init(params);
   
-  std::vector<int> iterations(grid.nPt());
+  std::vector<int> iterationCounts(grid.nPt());
 
   for (int i = 0; i < grid.nPt(); i++) {
-    iterations[i] = set.compute(grid(i));
+    iterationCounts[i] = mandelbrotSet.compute(grid(i));
   }
   
+  // coloring
+  ColoringMethods colMethod(&params);
   Color* color = new Color[params.pixel_nx*params.pixel_ny];
-  for(int j = 0; j < grid.nyPt()-1; j++) {
-    for(int i = 0; i < grid.nxPt()-1; i++){
-      color[i+j*(grid.nxPt()-1)].init(0, 0, 0);
-      if ( (iterations[i + j * grid.nxPt()] < params.max_iterations)
-          || (iterations[(i+1) + j * grid.nxPt()] < params.max_iterations)
-          || (iterations[i + (j+1) * grid.nxPt()] < params.max_iterations)
-          || (iterations[(i+1) + (j+1) * grid.nxPt()] < params.max_iterations)
-         ) {
-     //   std::cout<<"(" << grid(i,j).real()<<", "<<grid(i,j).imag() <<")" << ": " << iterations[i + j * grid.nxPt()]<<std::endl;
-        color[i+j*(grid.nxPt()-1)].init(255, 255, 255);
-      }
-    }
-  }
-  
-  string filename = "test.bmp";
-  //string filename = "/mnt/c/Users/Ahmad/Dropbox/ray-tracer-master/test.bmp";
-  saveBMP(filename, color, params.pixel_nx, params.pixel_ny);
+  colMethod.simple(color, iterationCounts);
+
+  // save
+  saveBMP(params.outputImageName, color, params.pixel_nx, params.pixel_ny);
   
   delete[] color;
 

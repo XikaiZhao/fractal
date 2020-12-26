@@ -1,8 +1,8 @@
 #include "Grid2D.h"
 
 Grid2D::Grid2D(Params params) {
-  pt_nx = params.pixel_nx+1;
-  pt_ny = params.pixel_ny+1;
+  pt_nx = params.grid_nx;
+  pt_ny = params.grid_ny;
   x_min = params.x_min;
   x_max = params.x_max;
   y_min = params.y_min;
